@@ -1,4 +1,0 @@
-{
-    "python.formatting.provider": "black",
-    "python.pythonPath": "/home/meow/miniconda3/envs/ml/bin/python"
-}
