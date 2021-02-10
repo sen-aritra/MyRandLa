@@ -85,15 +85,9 @@ class LocalSpatialEncoding(nn.Module):
         # finding neighboring points
         idx, dist = knn_output
         B, N, K = idx.size()
-        # idx(B, N, K), coords(B, N, 3)
-        # neighbors[b, i, n, k] = coords[b, idx[b, n, k], i] = extended_coords[b, i, extended_idx[b, i, n, k], k]
         extended_idx = idx.unsqueeze(1).expand(B, 3, N, K)
         extended_coords = coords.transpose(-2, -1).unsqueeze(-1).expand(B, 3, N, K)
         neighbors = torch.gather(extended_coords, 2, extended_idx)  # shape (B, 3, N, K)
-        # if USE_CUDA:
-        #     neighbors = neighbors.cuda()
-
-        # relative point position encoding
         concat = torch.cat(
             (
                 extended_coords,
@@ -318,12 +312,10 @@ if __name__ == "__main__":
     d_in = 7
     cloud = 1000 * torch.randn(1, 2 ** 16, d_in).to(device)
     model = RandLANet(d_in, 6, 16, 4, device)
-    # model.load_state_dict(torch.load('checkpoints/checkpoint_100.pth'))
     model.eval()
 
     t0 = time.time()
     pred = model(cloud)
     t1 = time.time()
-    # print(pred)
     print(t1 - t0)
 
