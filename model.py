@@ -144,7 +144,7 @@ class LocalFeatureAggregation(nn.Module):
 
         self.num_neighbors = num_neighbors
 
-        self.mlp1 = SharedMLP(d_in, d_out // 2, activation_fn=nn.LeakyReLU(0.2))
+        self.mlp1 = SharedMLP(d_in, d_out // 2, activation_fn=nn.GELU(0.2))
         self.mlp2 = SharedMLP(d_out, 2 * d_out)
         self.shortcut = SharedMLP(d_in, 2 * d_out, bn=True)
 
@@ -154,7 +154,7 @@ class LocalFeatureAggregation(nn.Module):
         self.pool1 = AttentivePooling(d_out, d_out // 2)
         self.pool2 = AttentivePooling(d_out, d_out)
 
-        self.lrelu = nn.LeakyReLU()
+        self.lrelu = nn.GELU()
 
     def forward(self, coords, features):
         r"""
@@ -202,7 +202,7 @@ class RandLANet(nn.Module):
 
         self.fc_start = nn.Linear(d_in, 8)
         self.bn_start = nn.Sequential(
-            nn.BatchNorm2d(8, eps=1e-6, momentum=0.99), nn.LeakyReLU(0.2)
+            nn.BatchNorm2d(8, eps=1e-6, momentum=0.99), nn.GELU(0.2)
         )
 
         # encoding layers
