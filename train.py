@@ -9,7 +9,6 @@ import warnings
 
 import torch
 import torch.nn as nn
-import torch.nn.functional as F
 from torch.utils.tensorboard import SummaryWriter
 
 from data import data_loaders
@@ -45,13 +44,7 @@ def train(args):
     logs_dir = args.logs_dir / args.name
     logs_dir.mkdir(exist_ok=True, parents=True)
 
-    # determine number of classes
-    try:
-        with open(args.dataset / "classes.json") as f:
-            labels = json.load(f)
-            num_classes = len(labels.keys())
-    except FileNotFoundError:
-        num_classes = int(input("Number of distinct classes in the dataset: "))
+    num_classes = len(cfg.class_weights)
 
     train_loader, val_loader = data_loaders(
         args.dataset,
